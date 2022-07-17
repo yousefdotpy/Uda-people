@@ -317,7 +317,7 @@ jobs:
           template: success_tagged_deploy_1
 
 workflows:
-  udapeople-cicd:
+  default:
     jobs:
       - build-frontend
       - build-backend
