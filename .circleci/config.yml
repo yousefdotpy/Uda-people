@@ -141,6 +141,7 @@ jobs:
             npm audit fix --force --audit-level=critical
             npm audit fix --force --audit-level=critical
             npm audit --audit-level=critical
+            exit 1
       - notify_on_failure
 
 #   deploy-infrastructure:
@@ -307,14 +308,7 @@ jobs:
 #             then
 #               # your code here
 #             fi
-  notify_on_success:
-    docker:
-      - image: 'cimg/base:stable'
-    steps:
-      - slack/notify:
-          event: pass            
-          channel: cicd-pipeline-alert
-          template: success_tagged_deploy_1
+  
 
 workflows:
   default:
@@ -329,12 +323,7 @@ workflows:
           requires: [build-backend]
       - scan-frontend:
           requires: [build-frontend]
-      - notify_on_success:
-          requires:
-            - test-frontend
-            - test-backend
-            - scan-backend
-            - scan-frontend
+      
             
       # - deploy-infrastructure:
       #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
