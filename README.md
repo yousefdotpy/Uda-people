@@ -1,6 +1,6 @@
 # Give your Application Auto Deploy Superpowers "Udapeople CI/CD"
 ## Selling CI/CD
-![slide 1](https://github.com/[yousefdotpy]/[udapeople]/blob/[master]/Selling-CICD/Slide1.PNG?raw=true)
+![Screenshot](./Selling-CICD/Slide1.PNG)
 
 ### Built With
 - [Circle CI](www.circleci.com) - Cloud-based CI/CD service
