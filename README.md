@@ -1,6 +1,11 @@
 # Give your Application Auto Deploy Superpowers "Udapeople CI/CD"
 ## Selling CI/CD
 ![Screenshot](./Selling-CICD/Slide1.PNG)
+![Screenshot](./Selling-CICD/Slide2.PNG)
+![Screenshot](./Selling-CICD/Slide3.PNG)
+![Screenshot](./Selling-CICD/Slide4.PNG)
+![Screenshot](./Selling-CICD/Slide5.PNG)
+![Screenshot](./Selling-CICD/Slide6.PNG)
 
 ### Built With
 - [Circle CI](www.circleci.com) - Cloud-based CI/CD service
