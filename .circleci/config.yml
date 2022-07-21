@@ -198,7 +198,6 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
 
-      - destroy-environment
 #   configure-infrastructure:
 #     docker:
 #       # Docker image here that supports Ansible
