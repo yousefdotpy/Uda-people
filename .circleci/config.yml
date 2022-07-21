@@ -239,29 +239,24 @@ jobs:
       - image: cimg/node:13.8.0
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/
+      - install_awscli
       - run:
           name: Run migrations
-          command: |            
-            echo "0"
+          command: |
             cd backend
-            echo "1"
-            npm install 
-            echo "2"
-            echo "$TYPEORM_USERNAME"
-            echo "$TYPEORM_PASSWORD"
-            echo "====="
-            npm run migrations 
-            echo "3"
+            npm install
+            npm audit fix --force --audit-level=critical 
+            npm audit fix --force --audit-level=critical 
+            npm audit fix --force --audit-level=critical 
+            npm audit fix --force 
+            npm run migrations
       - run:
-          name: Send migration statues to kvdb.io
+          name: Send migration results to kvdb.io
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-            then              
-                
+            then                              
                 curl https://kvdb.io/2skvzNEQXGuQ3Am4mY7gVq/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
-            fi 
+            fi
       - destroy-environment
       - revert-migrations
 
