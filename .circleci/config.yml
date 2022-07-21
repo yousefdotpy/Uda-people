@@ -240,22 +240,19 @@ jobs:
     steps:
       - checkout
       - install_awscli
+      - install_nodejs
       - run:
           name: Run migrations
           command: |
             cd backend
             npm install
-            npm audit fix --force --audit-level=critical 
-            npm audit fix --force --audit-level=critical 
-            npm audit fix --force --audit-level=critical 
-            npm audit fix --force 
-            npm run migrations
+            npm run migrations > migrations_dump.txt
       - run:
           name: Send migration results to kvdb.io
           command: |
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
-            then                              
-                curl https://kvdb.io/2skvzNEQXGuQ3Am4mY7gVq/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
+            then
+              curl https://kvdb.io/QRK6wBJNWJW9VdoAiy4YcP/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
       - destroy-environment
       - revert-migrations
