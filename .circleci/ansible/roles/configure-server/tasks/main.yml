@@ -2,12 +2,15 @@
 - name: "Add Node.js"
   become: true
   shell: |
-    curl curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+    curl -SL https://deb.nodesource.com/setup_13.x | sudo -E bash -
   
 - name: "Install Node.js"
   become: true
-  sapt: |
-    sudo apt-get install -y nodejs
+  apt:
+    name: ["nodejs"]
+    state: latest
+    update_cache: yes
+
 
 - name: "Install PM2 "
   npm:
