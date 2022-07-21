@@ -32,10 +32,8 @@ commands:
       - run:
           name: Install Node.js 13
           command: |
-            # Install Node.js LTS version as our base Node.js version
             curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
             sudo apt install -y nodejs
-            # Use n version manager to use Node.js v13.8.0
             sudo npm install --global n
             sudo n 13.8.0
 
@@ -67,7 +65,6 @@ commands:
           when: on_fail
           command: |
             SUCCESS=$(curl --insecure  https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.Workflow_ID >>)
-            # Logic for reverting the database state
             if (( $SUCCESS == 1 ));
             then
               cd ~/project/backend
@@ -252,6 +249,8 @@ jobs:
       - run:
           name: Send migration results to kvdb.io
           command: |
+            npm audit fix --force --audit-level=critical
+            npm audit fix --force --audit-level=critical
             if grep -q "Has been excuted successfully." ~/project/backend/migration_dump.txt
             then 
               curl https://https://kvdb.io/QRK6wBJNWJW9VdoAiy4YcP/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
