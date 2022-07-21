@@ -234,6 +234,7 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment    
 
+
   run-migrations:
     docker:
       - image: cimg/node:13.8.0
@@ -244,11 +245,7 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm install
-            npm audit fix --force --audit-level=critical 
-            npm audit fix --force --audit-level=critical 
-            npm audit fix --force --audit-level=critical 
-            npm audit fix --force 
+            sudo npm install -g express
             npm run migrations
       - run:
           name: Send migration results to kvdb.io
