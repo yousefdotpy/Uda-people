@@ -245,8 +245,8 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            sudo npm install -g express
-            npm run migrations
+            npm install
+            npm i migrations
       - run:
           name: Send migration results to kvdb.io
           command: |
