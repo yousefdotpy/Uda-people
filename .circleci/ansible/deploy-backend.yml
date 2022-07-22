@@ -1,8 +1,7 @@
 ---
-
-- name: "Configuration play"
-  hosts: web
-  user : root
+- name: Deploy and start udapeople backend server
+  hosts: all
+  remote_user: ubuntu
   become: true
   become_method: sudo
   become_user: root
@@ -11,9 +10,8 @@
     - ansible_python_interpreter: /usr/bin/python3
     - ansible_host_key_checking: false
     - ansible_stdout_callback: yaml
-  
   environment:
-    NODE_ENV: production
+    ENVIRONMENT: production
     VERSION: "1"
     TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
     TYPEORM_MIGRATIONS_DIR: "{{lookup('env','TYPEORM_MIGRATIONS_DIR')}}"
@@ -23,7 +21,6 @@
     TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME') }}"
     TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD') }}"
     TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE') }}"
-  
   pre_tasks:
     - name: "wait 600 seconds for target connection to become reachable/usable."
       wait_for_connection:
@@ -33,7 +30,5 @@
       raw: test -e /usr/bin/python3 || (apt update -y && apt install python3 -y)
       changed_when: false
     - setup:
-    
   roles:
     - deploy
-
