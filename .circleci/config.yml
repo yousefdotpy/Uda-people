@@ -290,14 +290,14 @@ jobs:
       - attach_workspace:
           at: ~/
       - restore_cache:
-          keys: [backend-build]
+          keys: [backend-deps]
       - run:
           name: Install dependencies
           command: |
             cd backend
             npm install
       - run:
-          name: package backend
+          name: Package Backend
           command: |
             cd backend
             npm run build
@@ -315,6 +315,7 @@ jobs:
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment
       - revert-migrations
+
   
 
   smoke-test:
