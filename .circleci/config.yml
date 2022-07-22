@@ -82,7 +82,7 @@ jobs:
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-#build backend
+#build
   build-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -222,8 +222,8 @@ jobs:
       - image: cimg/node:13.8.0
     steps:
       - checkout
-      - install_nodejs
       - install_awscli
+      - install_nodejs
       - run:
           name: Run migrations
           command: |
@@ -283,12 +283,13 @@ jobs:
     steps:
       - checkout
       - install_awscli
-      - install_ansible
       - install_nodejs
+      - install_ansible
       - add_ssh_keys:
           fingerprints: ["75:42:17:5a:17:8b:ac:f7:f3:c9:86:57:0b:84:78:ea"]
       - attach_workspace:
           at: ~/
+        
       - restore_cache:
           keys: [backend-build]
       - run:
@@ -313,8 +314,8 @@ jobs:
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-      - destroy-environment
-      - revert-migrations
+      - destroy-environment:
+      - revert-migrations:
   
 
   smoke-test:
