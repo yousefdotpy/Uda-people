@@ -4,11 +4,12 @@
     path: ~/backend-app
     state: directory
 
-- name: "Unarchive back-end files"
+- name: "unarchive backend files"
+  become: true
   unarchive:
     src: artifact.tar.gz
     dest: ~/backend-app
-
+    
 - name: "Install nodejs deps"
   shell: |
     cd ~/backend-app
