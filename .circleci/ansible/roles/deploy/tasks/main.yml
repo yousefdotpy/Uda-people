@@ -2,24 +2,24 @@
 - name: "create backend app directory"
   become: true
   file:
-    path: /home/ubuntu/backend
+    path: /home/circleci/project/backend
     state: directory
 
 - name: "unarchive backend files"
   become: true
   unarchive:
     src: artifact.tar.gz
-    dest: /home/ubuntu/backend
+    dest: /home/circleci/project/backend
 
 - name: "install node dep"
   become: true
   shell: |
-    cd /home/ubuntu/backend
+    cd /home/circleci/project/backend
     npm install
 - name: "executing node app with PM2"
   become: true
   shell: |
-    cd /home/ubuntu/backend/dist
+    cd /home/circleci/project/backend/dist
     pm2 stop default
     pm2 start main.js
   register: execute_node
