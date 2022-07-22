@@ -245,7 +245,6 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            exit 0
             npm install
             npm i migrations > migrations_dump.txt
             cat migrations_dump.txt
