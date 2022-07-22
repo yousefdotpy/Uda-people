@@ -1,35 +1,51 @@
 ---
-- name: "create backend app directory"
-  become: true
+
+- name: "Creates backend app directory"
   file:
-    path: /home/circleci/project/backend
+    path: ~/backend-app
     state: directory
 
-- name: "unarchive backend files"
-  become: true
+- name: "Unarchive backend files"
   unarchive:
     src: artifact.tar.gz
-    dest: /home/circleci/project/backend
+    dest: ~/backend-app
 
-- name: "install node dep"
+- name: "install dependencies."
   become: true
+  apt:
+    name: ["nodejs", "npm"]
+    state: latest
+    update_cache: yes
+    
+- name: "install n"
+  become: yes
+  npm:
+    name: n
+    global: yes
+    production: yes
+- name: "install nodejs 13.8.0"
+  become: yes
+  shell: n 13.8.0
+
+
+- name: "Installing Node Dependencies"
   shell: |
-    cd /home/circleci/project/backend
+    npm install pm2@latest -g
+    cd ~/backend-app
     npm install
-- name: "executing node app with PM2"
-  become: true
+- name: "Executing Node app with PM2"
   shell: |
-    cd /home/circleci/project/backend/dist
+    cd ~/backend-app/dist    
     pm2 stop default
-    pm2 start main.js
+    pm2 start main.js -- --port 3030
   register: execute_node
 
-- name: "print message"
-  become: true
+- name: print message
   debug:
-    msg: "{{execute_node.stdout_lines}}"
+    msg: "{{ execute_node.stdout_lines }}"
 
-- name: "configure pm2 start as service"
+- name: "Configure pm2 to start as service"
   become: true
   shell: |
-    env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu
+    sudo su -c "env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu"
+    pm2 save
