@@ -1,6 +1,5 @@
 ---
 - name: Configure udapeople infrastructure
-  hosts: all
   remote_user: ubuntu
   become: true
   become_method: sudo
