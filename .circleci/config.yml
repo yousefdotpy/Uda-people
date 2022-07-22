@@ -1,7 +1,6 @@
 version: 2.1
 
-orbs:
-  slack: circleci/slack@4.9.3
+
 
 commands:
   install_awscli:
@@ -24,12 +23,7 @@ commands:
             sudo apt install software-properties-common -y
             sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible -y
-  notify_on_failure:
-    steps:
-      - slack/notify:
-          event: fail
-          channel: udapeopleci
-          template: basic_fail_1
+  
   install_nodejs:
     description: install nodejs 13
     steps:
@@ -413,14 +407,7 @@ jobs:
               aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
               aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
             fi
-  notify_on_success:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - slack/notify:
-          event: pass
-          channel: udapeopleci
-          template: success_tagged_deployment_1
+  
 
 workflows:
   default:
