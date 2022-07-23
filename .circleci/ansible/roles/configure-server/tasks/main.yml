@@ -3,10 +3,7 @@
   become: true
   shell: |
     curl -fsSL https://deb.nodesource.com/setup_10.x sudo -E bash -
-    sudo apt install -y nodejs
-    sudo npm install --global n
-    sudo n 13.8.0
-    
+
 - name: Install NodeJs 10.x
   become: true
   apt: 
