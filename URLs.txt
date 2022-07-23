@@ -1,0 +1,5 @@
+github rebo : https://github.com/yousefdotpy/udapeople
+S3 pucket : http://udapeople-ede7743.s3-website-us-east-1.amazonaws.com
+CloudFront : https://d2p0gw1j5k2h3c.cloudfront.net
+Backend instance: ec2-18-212-171-44.compute-1.amazonaws.com
+Prometheus : 54.165.125.189:9090
