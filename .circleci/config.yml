@@ -327,8 +327,8 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - install-awscli
-      - install-nodejs
+      - install_awscli
+      - install_nodejs
       - run:
           name: Get backend url
           command: |
