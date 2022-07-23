@@ -164,41 +164,45 @@ jobs:
   #Deploying the infrastruucture for our app
   deploy-infrastructure:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
     steps:
       - checkout
-      - run:
-          command: |
-            yum install -y tar gzip
+      - install_awscli
       - run:
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
-              --tags project=udapeople-backend \
+              --tags project=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
               --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
           name: Ensure front-end infrastructure exist
+
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
-              --tags project=udapeople-frontend \
+              --tags project=udapeople \
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            aws ec2 describe-instances \
+            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --query "Reservations[*].Instances[*].PublicIpAddress" \
-              --output text >> .circleci/ansible/inventory.txt
-            cat .circleci/ansible/inventory.txt
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text)
+              echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
+              cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy-environment
+
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+      - revert-migrations:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
 
   configure-infrastructure:
     docker:
@@ -208,7 +212,7 @@ jobs:
       - install-awscli
       - install-ansible
       - add_ssh_keys:
-          fingerprints: []
+          fingerprints: ["75:42:17:5a:17:8b:ac:f7:f3:c9:86:57:0b:84:78:ea"]
       - attach_workspace:
           at: ~/
       - run:
@@ -283,7 +287,7 @@ jobs:
       - install-ansible
       - install-nodejs
       - add_ssh_keys:
-          fingerprints: []
+          fingerprints: ["75:42:17:5a:17:8b:ac:f7:f3:c9:86:57:0b:84:78:ea"]
       - attach_workspace:
           at: ~/
       - restore_cache:
