@@ -25,10 +25,10 @@ commands:
             sudo apt install ansible -y
   
   install_nodejs:
-    description: install nodejs 13
+    description: install nodejs
     steps:
       - run:
-          name: install Node.js 13
+          name: install Node.js
           command: |
             curl -fsSL https://deb.nodesource.com/setup_10.x | sudo -E bash -
             sudo apt install -y nodejs
@@ -322,22 +322,22 @@ jobs:
 # 
   
 
-  smoke-test:
+  ssmoke-test:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
-      - install_awscli
-      - install_nodejs
+      - install-aws-cli
+      - install-nodejs
       - run:
-          name: backend smoke test
+          name: Get backend url
           command: |
-            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
-              --filters "Name=tag:project,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text)
-            export API_URL=http://${BACKEND_PUBLIC_IP}:3030
-            echo $BACKEND_PUBLIC_IP
+            BACKEND_IP=$(aws ec2 describe-instances \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --query "Reservations[*].Instances[*].PublicIpAddress" \
+              --output text) 
+            export API_URL=http://${BACKEND_IP}:3030
+            echo $API_URL
             if curl -s $API_URL/api/status | grep "ok"
             then
               exit 0
@@ -345,15 +345,14 @@ jobs:
               exit 1
             fi
       - run:
-          name: frontend smoke test
+          name: Frontend smoke test.
           command: |
-            FRONTEND_WEBSITE="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-west-2.amazonaws.com/#/employees"
-            echo ${FRONTEND_WEBSITE}
+            FRONEND_WEBSITE=http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website.${AWS_DEFAULT_REGION}.amazonaws.com
             if curl -s $FRONTEND_WEBSITE | grep "Welcome"
-            then
+            then 
               exit 0
-            else
-              exit 1
+            else 
+              exit 0
             fi
       - destroy-environment
       - revert-migrations
