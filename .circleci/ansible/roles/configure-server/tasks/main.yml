@@ -1,20 +1,15 @@
 ---
-- name: "install dependencies."
+- name: Adding nodejs from node source
+  become: true
+  shell: |
+    curl -fsSL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+    
+- name: Install nodejs
   become: true
   apt:
-    name: ["nodejs", "npm"]
+    name: ["nodejs"]
     state: latest
     update_cache: yes
-    
-- name: "install n"
-  become: yes
-  npm:
-    name: n
-    global: yes
-    production: yes
-- name: "install nodejs 13.8.0"
-  become: yes
-  shell: n 13.8.0
 
 - name: "Install pm2 Globally"
   npm:
